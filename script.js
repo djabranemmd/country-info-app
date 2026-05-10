@@ -11,6 +11,8 @@ const loader = document.getElementById("loader");
 
 const errorMessage = document.getElementById("errorMessage");
 
+const themeToggle = document.getElementById("themeToggle");
+
 const countryFlag = document.getElementById("countryFlag");
 
 const countryName = document.getElementById("countryName");
@@ -25,7 +27,30 @@ const language = document.getElementById("language");
 
 const region = document.getElementById("region");
 
-// Function: Fetch Country Data
+// Theme Mode
+if (localStorage.getItem("theme") === "light") {
+  document.body.classList.add("light-mode");
+
+  themeToggle.textContent = "☀️ Light Mode";
+}
+
+// Toggle Theme
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("light-mode");
+
+  // Save Theme
+  if (document.body.classList.contains("light-mode")) {
+    localStorage.setItem("theme", "light");
+
+    themeToggle.textContent = "☀️ Light Mode";
+  } else {
+    localStorage.setItem("theme", "dark");
+
+    themeToggle.textContent = "🌙 Dark Mode";
+  }
+});
+
+// Fetch Country Data
 async function getCountryData(country) {
   // Show Loader
   loader.style.display = "block";
@@ -42,7 +67,7 @@ async function getCountryData(country) {
       `https://restcountries.com/v3.1/name/${country}`,
     );
 
-    // If Country Not Found
+    // Error Handling
     if (!response.ok) {
       throw new Error("Country not found");
     }
@@ -52,10 +77,10 @@ async function getCountryData(country) {
 
     const countryData = data[0];
 
-    // Country Flag
+    // Flag
     countryFlag.src = countryData.flags.svg;
 
-    // Country Name
+    // Name
     countryName.textContent = countryData.name.common;
 
     // Capital
@@ -78,12 +103,10 @@ async function getCountryData(country) {
     // Show Card
     countryCard.classList.remove("hidden");
   } catch (error) {
-    // Show Error
     errorMessage.style.display = "block";
 
     console.log(error);
   } finally {
-    // Hide Loader
     loader.style.display = "none";
   }
 }
@@ -104,7 +127,7 @@ countryInput.addEventListener("keydown", (event) => {
   }
 });
 
-// Random Country Button
+// Random Country
 randomBtn.addEventListener("click", () => {
   const countries = [
     "Algeria",

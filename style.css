@@ -19,6 +19,15 @@ body {
     padding: 20px;
 
     color: white;
+
+    transition: 0.4s;
+}
+
+/* Light Mode */
+body.light-mode {
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+
+    color: #222;
 }
 
 /* Main Container */
@@ -37,6 +46,18 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 
     text-align: center;
+
+    transition: 0.4s;
+}
+
+/* Light Container */
+body.light-mode .container {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Theme Button */
+.theme-toggle {
+    margin-bottom: 20px;
 }
 
 /* Title */
@@ -78,7 +99,7 @@ button {
 
     border-radius: 10px;
 
-    background-color: #ffffff;
+    background-color: white;
 
     color: #1e3c72;
 
@@ -91,7 +112,7 @@ button {
     transition: 0.3s;
 }
 
-/* Hover Effect */
+/* Hover */
 button:hover {
     background-color: #dbe9ff;
 
@@ -109,6 +130,11 @@ button:hover {
     text-align: left;
 
     animation: fadeIn 0.5s ease;
+}
+
+/* Light Card */
+body.light-mode .country-card {
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Flag */
