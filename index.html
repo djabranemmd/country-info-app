@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Country Info App</title>
+
+        <!-- CSS File -->
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+
+        <!-- Main Container -->
+        <div class="container">
+
+            <!-- Title -->
+            <h1>🌍 Country Info App</h1>
+
+            <!-- Search Section -->
+            <div class="search-box">
+
+                <!-- Input -->
+                <input
+                    type="text"
+                    id="countryInput"
+                    placeholder="Enter country name...">
+
+                <!-- Search Button -->
+                <button id="searchBtn">
+                    Search
+                </button>
+
+                <!-- Random Country Button -->
+                <button id="randomBtn">
+                    Random Country
+                </button>
+
+            </div>
+
+            <!-- Country Card -->
+            <div class="country-card" id="countryCard">
+
+                <!-- Country Flag -->
+                <img
+                    id="countryFlag"
+                    src
+                    alt="Country Flag">
+
+                <!-- Country Name -->
+                <h2 id="countryName">
+                    Country Name
+                </h2>
+
+                <!-- Country Information -->
+                <p><strong>Capital:</strong> <span id="capital">-</span></p>
+
+                <p><strong>Population:</strong> <span
+                        id="population">-</span></p>
+
+                <p><strong>Currency:</strong> <span id="currency">-</span></p>
+
+                <p><strong>Language:</strong> <span id="language">-</span></p>
+
+                <p><strong>Region:</strong> <span id="region">-</span></p>
+
+            </div>
+
+        </div>
+
+        <!-- JavaScript File -->
+        <script src="script.js"></script>
+
+    </body>
+</html>
