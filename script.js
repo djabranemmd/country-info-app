@@ -5,6 +5,12 @@ const searchBtn = document.getElementById("searchBtn");
 
 const randomBtn = document.getElementById("randomBtn");
 
+const countryCard = document.getElementById("countryCard");
+
+const loader = document.getElementById("loader");
+
+const errorMessage = document.getElementById("errorMessage");
+
 const countryFlag = document.getElementById("countryFlag");
 
 const countryName = document.getElementById("countryName");
@@ -21,16 +27,29 @@ const region = document.getElementById("region");
 
 // Function: Fetch Country Data
 async function getCountryData(country) {
+  // Show Loader
+  loader.style.display = "block";
+
+  // Hide Error
+  errorMessage.style.display = "none";
+
+  // Hide Card
+  countryCard.classList.add("hidden");
+
   try {
     // API Request
     const response = await fetch(
       `https://restcountries.com/v3.1/name/${country}`,
     );
 
-    // Convert Response To JSON
+    // If Country Not Found
+    if (!response.ok) {
+      throw new Error("Country not found");
+    }
+
+    // Convert To JSON
     const data = await response.json();
 
-    // First Country Result
     const countryData = data[0];
 
     // Country Flag
@@ -55,14 +74,21 @@ async function getCountryData(country) {
 
     // Region
     region.textContent = countryData.region;
+
+    // Show Card
+    countryCard.classList.remove("hidden");
   } catch (error) {
-    alert("Country not found!");
+    // Show Error
+    errorMessage.style.display = "block";
 
     console.log(error);
+  } finally {
+    // Hide Loader
+    loader.style.display = "none";
   }
 }
 
-// Search Button Click
+// Search Button
 searchBtn.addEventListener("click", () => {
   const country = countryInput.value.trim();
 
@@ -71,7 +97,7 @@ searchBtn.addEventListener("click", () => {
   }
 });
 
-// Enter Key Support
+// Enter Key
 countryInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     searchBtn.click();
