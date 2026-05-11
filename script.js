@@ -13,6 +13,10 @@ const errorMessage = document.getElementById("errorMessage");
 
 const themeToggle = document.getElementById("themeToggle");
 
+const favoriteBtn = document.getElementById("favoriteBtn");
+
+const favoritesList = document.getElementById("favoritesList");
+
 const countryFlag = document.getElementById("countryFlag");
 
 const countryName = document.getElementById("countryName");
@@ -27,7 +31,15 @@ const language = document.getElementById("language");
 
 const region = document.getElementById("region");
 
+// Favorites Array
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+// Current Country
+let currentCountry = "";
+
+// =========================
 // Theme Mode
+// =========================
 if (localStorage.getItem("theme") === "light") {
   document.body.classList.add("light-mode");
 
@@ -38,7 +50,6 @@ if (localStorage.getItem("theme") === "light") {
 themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("light-mode");
 
-  // Save Theme
   if (document.body.classList.contains("light-mode")) {
     localStorage.setItem("theme", "light");
 
@@ -50,32 +61,31 @@ themeToggle.addEventListener("click", () => {
   }
 });
 
+// =========================
 // Fetch Country Data
+// =========================
 async function getCountryData(country) {
-  // Show Loader
   loader.style.display = "block";
 
-  // Hide Error
   errorMessage.style.display = "none";
 
-  // Hide Card
   countryCard.classList.add("hidden");
 
   try {
-    // API Request
     const response = await fetch(
       `https://restcountries.com/v3.1/name/${country}`,
     );
 
-    // Error Handling
     if (!response.ok) {
       throw new Error("Country not found");
     }
 
-    // Convert To JSON
     const data = await response.json();
 
     const countryData = data[0];
+
+    // Save Current Country
+    currentCountry = countryData.name.common;
 
     // Flag
     countryFlag.src = countryData.flags.svg;
@@ -111,7 +121,57 @@ async function getCountryData(country) {
   }
 }
 
+// =========================
+// Add To Favorites
+// =========================
+favoriteBtn.addEventListener("click", () => {
+  if (currentCountry && !favorites.includes(currentCountry)) {
+    favorites.push(currentCountry);
+
+    // Save To LocalStorage
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+
+    renderFavorites();
+  }
+});
+
+// =========================
+// Render Favorites
+// =========================
+function renderFavorites() {
+  favoritesList.innerHTML = "";
+
+  favorites.forEach((country, index) => {
+    const li = document.createElement("li");
+
+    li.classList.add("favorite-item");
+
+    li.innerHTML = `
+      <span>${country}</span>
+
+      <button class="delete-btn" onclick="removeFavorite(${index})">
+        Delete
+      </button>
+    `;
+
+    favoritesList.appendChild(li);
+  });
+}
+
+// =========================
+// Remove Favorite
+// =========================
+function removeFavorite(index) {
+  favorites.splice(index, 1);
+
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+
+  renderFavorites();
+}
+
+// =========================
 // Search Button
+// =========================
 searchBtn.addEventListener("click", () => {
   const country = countryInput.value.trim();
 
@@ -120,14 +180,18 @@ searchBtn.addEventListener("click", () => {
   }
 });
 
+// =========================
 // Enter Key
+// =========================
 countryInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     searchBtn.click();
   }
 });
 
+// =========================
 // Random Country
+// =========================
 randomBtn.addEventListener("click", () => {
   const countries = [
     "Algeria",
@@ -146,3 +210,6 @@ randomBtn.addEventListener("click", () => {
 
   getCountryData(randomCountry);
 });
+
+// Initial Render
+renderFavorites();
