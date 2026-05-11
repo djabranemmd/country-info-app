@@ -3,6 +3,9 @@
 A modern and interactive web application that allows users to search for countries and explore detailed information about them using the REST Countries API.
 
 # My first experience
+
+This was my first educational experience with APIs. It was a fun and simple experience, and I learned a lot of information and valuable insights about this topic from it.
+
 ---
 
 # ✨ Features
