@@ -1,6 +1,8 @@
 // Select Elements
 const countryInput = document.getElementById("countryInput");
 
+const suggestionsList = document.getElementById("suggestionsList");
+
 const searchBtn = document.getElementById("searchBtn");
 
 const randomBtn = document.getElementById("randomBtn");
@@ -31,7 +33,31 @@ const language = document.getElementById("language");
 
 const region = document.getElementById("region");
 
-// Favorites Array
+// Countries Array
+const countries = [
+  "Algeria",
+  "France",
+  "Brazil",
+  "Japan",
+  "Canada",
+  "Italy",
+  "Germany",
+  "India",
+  "Turkey",
+  "Australia",
+  "Argentina",
+  "Spain",
+  "Portugal",
+  "China",
+  "South Korea",
+  "Mexico",
+  "Russia",
+  "Egypt",
+  "Saudi Arabia",
+  "Tunisia",
+];
+
+// Favorites
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
 // Current Country
@@ -62,6 +88,39 @@ themeToggle.addEventListener("click", () => {
 });
 
 // =========================
+// Search Suggestions
+// =========================
+countryInput.addEventListener("input", () => {
+  const inputValue = countryInput.value.toLowerCase();
+
+  suggestionsList.innerHTML = "";
+
+  if (inputValue === "") {
+    return;
+  }
+
+  const filteredCountries = countries.filter((country) =>
+    country.toLowerCase().includes(inputValue),
+  );
+
+  filteredCountries.forEach((country) => {
+    const li = document.createElement("li");
+
+    li.textContent = country;
+
+    li.addEventListener("click", () => {
+      countryInput.value = country;
+
+      suggestionsList.innerHTML = "";
+
+      getCountryData(country);
+    });
+
+    suggestionsList.appendChild(li);
+  });
+});
+
+// =========================
 // Fetch Country Data
 // =========================
 async function getCountryData(country) {
@@ -84,7 +143,6 @@ async function getCountryData(country) {
 
     const countryData = data[0];
 
-    // Save Current Country
     currentCountry = countryData.name.common;
 
     // Flag
@@ -110,7 +168,6 @@ async function getCountryData(country) {
     // Region
     region.textContent = countryData.region;
 
-    // Show Card
     countryCard.classList.remove("hidden");
   } catch (error) {
     errorMessage.style.display = "block";
@@ -122,22 +179,19 @@ async function getCountryData(country) {
 }
 
 // =========================
-// Add To Favorites
+// Favorites
 // =========================
 favoriteBtn.addEventListener("click", () => {
   if (currentCountry && !favorites.includes(currentCountry)) {
     favorites.push(currentCountry);
 
-    // Save To LocalStorage
     localStorage.setItem("favorites", JSON.stringify(favorites));
 
     renderFavorites();
   }
 });
 
-// =========================
 // Render Favorites
-// =========================
 function renderFavorites() {
   favoritesList.innerHTML = "";
 
@@ -158,9 +212,7 @@ function renderFavorites() {
   });
 }
 
-// =========================
 // Remove Favorite
-// =========================
 function removeFavorite(index) {
   favorites.splice(index, 1);
 
@@ -176,6 +228,8 @@ searchBtn.addEventListener("click", () => {
   const country = countryInput.value.trim();
 
   if (country !== "") {
+    suggestionsList.innerHTML = "";
+
     getCountryData(country);
   }
 });
@@ -193,19 +247,6 @@ countryInput.addEventListener("keydown", (event) => {
 // Random Country
 // =========================
 randomBtn.addEventListener("click", () => {
-  const countries = [
-    "Algeria",
-    "France",
-    "Brazil",
-    "Japan",
-    "Canada",
-    "Italy",
-    "Germany",
-    "India",
-    "Turkey",
-    "Australia",
-  ];
-
   const randomCountry = countries[Math.floor(Math.random() * countries.length)];
 
   getCountryData(randomCountry);

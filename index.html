@@ -23,10 +23,19 @@
             <!-- Search Section -->
             <div class="search-box">
 
-                <input
-                    type="text"
-                    id="countryInput"
-                    placeholder="Enter country name...">
+                <!-- Input Wrapper -->
+                <div class="input-wrapper">
+
+                    <input
+                        type="text"
+                        id="countryInput"
+                        placeholder="Enter country name..."
+                        autocomplete="off">
+
+                    <!-- Suggestions -->
+                    <ul id="suggestionsList"></ul>
+
+                </div>
 
                 <button id="searchBtn">
                     Search
@@ -41,7 +50,7 @@
             <!-- Loader -->
             <div class="loader" id="loader"></div>
 
-            <!-- Error Message -->
+            <!-- Error -->
             <p class="error-message" id="errorMessage">
                 Country not found!
             </p>
@@ -69,14 +78,14 @@
 
                 <p><strong>Region:</strong> <span id="region">-</span></p>
 
-                <!-- Favorite Button -->
+                <!-- Favorite -->
                 <button id="favoriteBtn">
                     ❤️ Add To Favorites
                 </button>
 
             </div>
 
-            <!-- Favorites Section -->
+            <!-- Favorites -->
             <div class="favorites-section">
 
                 <h3>⭐ Favorite Countries</h3>
