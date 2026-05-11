@@ -19,6 +19,8 @@ const favoriteBtn = document.getElementById("favoriteBtn");
 
 const favoritesList = document.getElementById("favoritesList");
 
+const bordersContainer = document.getElementById("bordersContainer");
+
 const countryFlag = document.getElementById("countryFlag");
 
 const countryName = document.getElementById("countryName");
@@ -167,6 +169,39 @@ async function getCountryData(country) {
 
     // Region
     region.textContent = countryData.region;
+
+    // =========================
+    // Border Countries
+    // =========================
+    bordersContainer.innerHTML = "";
+
+    if (countryData.borders) {
+      countryData.borders.forEach((border) => {
+        const borderBtn = document.createElement("button");
+
+        borderBtn.classList.add("border-btn");
+
+        borderBtn.textContent = border;
+
+        borderBtn.addEventListener("click", async () => {
+          try {
+            const borderResponse = await fetch(
+              `https://restcountries.com/v3.1/alpha/${border}`,
+            );
+
+            const borderData = await borderResponse.json();
+
+            getCountryData(borderData[0].name.common);
+          } catch (error) {
+            console.log(error);
+          }
+        });
+
+        bordersContainer.appendChild(borderBtn);
+      });
+    } else {
+      bordersContainer.innerHTML = "<p>No border countries</p>";
+    }
 
     countryCard.classList.remove("hidden");
   } catch (error) {

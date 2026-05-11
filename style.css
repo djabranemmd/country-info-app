@@ -98,7 +98,7 @@ input {
     outline: none;
 }
 
-/* Suggestions List */
+/* Suggestions */
 #suggestionsList {
     position: absolute;
 
@@ -131,7 +131,7 @@ input {
     transition: 0.2s;
 }
 
-/* Suggestion Hover */
+/* Hover */
 #suggestionsList li:hover {
     background-color: #f0f0f0;
 }
@@ -211,6 +211,49 @@ body.light-mode .country-card {
     margin: 12px 0;
 
     font-size: 18px;
+}
+
+/* Borders Section */
+.borders-section {
+    margin-top: 25px;
+}
+
+/* Borders Title */
+.borders-section h3 {
+    margin-bottom: 15px;
+}
+
+/* Borders Container */
+#bordersContainer {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+/* Border Button */
+.border-btn {
+    padding: 10px 14px;
+
+    background-color: white;
+
+    color: #1e3c72;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+/* Border Hover */
+.border-btn:hover {
+    background-color: #dbe9ff;
 }
 
 /* Favorite Button */
