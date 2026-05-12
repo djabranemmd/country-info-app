@@ -1,110 +1,24 @@
-// Elements
-const countryInput = document.getElementById("countryInput");
-const searchBtn = document.getElementById("searchBtn");
-const randomBtn = document.getElementById("randomBtn");
+// IMPORTANT FIX: wait DOM ready
+document.addEventListener("DOMContentLoaded", () => {
+  const countryInput = document.getElementById("countryInput");
+  const suggestionsList = document.getElementById("suggestionsList");
 
-const countryCard = document.getElementById("countryCard");
-const loader = document.getElementById("loader");
-const errorMessage = document.getElementById("errorMessage");
+  const searchBtn = document.getElementById("searchBtn");
+  const randomBtn = document.getElementById("randomBtn");
 
-const countryFlag = document.getElementById("countryFlag");
-const countryName = document.getElementById("countryName");
-const capital = document.getElementById("capital");
-const population = document.getElementById("population");
-const currency = document.getElementById("currency");
-const language = document.getElementById("language");
-const region = document.getElementById("region");
+  const countryCard = document.getElementById("countryCard");
+  const loader = document.getElementById("loader");
 
-const copyBtn = document.getElementById("copyBtn");
-const lastSearch = document.getElementById("lastSearch");
+  const favoriteBtn = document.getElementById("favoriteBtn");
+  const favoritesList = document.getElementById("favoritesList");
 
-// =========================
-// UI Helpers
-// =========================
-function showLoader() {
-  loader.style.display = "block";
-}
+  const countryName = document.getElementById("countryName");
 
-function hideLoader() {
-  loader.style.display = "none";
-}
+  let currentCountry = "";
+  let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
-function showError() {
-  errorMessage.style.display = "block";
-}
-
-function hideError() {
-  errorMessage.style.display = "none";
-}
-
-function showCard() {
-  countryCard.classList.remove("hidden");
-}
-
-function hideCard() {
-  countryCard.classList.add("hidden");
-}
-
-// =========================
-// Fetch Country
-// =========================
-async function getCountryData(country) {
-  showLoader();
-  hideError();
-  hideCard();
-
-  try {
-    const res = await fetch(`https://restcountries.com/v3.1/name/${country}`);
-
-    if (!res.ok) throw new Error();
-
-    const data = await res.json();
-    const c = data[0];
-
-    updateUI(c);
-    saveLastSearch(c.name.common);
-    showCard();
-  } catch (err) {
-    showError();
-  } finally {
-    hideLoader();
-  }
-}
-
-// =========================
-// Update UI
-// =========================
-function updateUI(c) {
-  countryFlag.src = c.flags.svg;
-  countryName.textContent = c.name.common;
-  capital.textContent = c.capital?.[0] || "N/A";
-  population.textContent = c.population.toLocaleString();
-  currency.textContent = Object.values(c.currencies)[0].name;
-  language.textContent = Object.values(c.languages).join(", ");
-  region.textContent = c.region;
-}
-
-// =========================
-// Search
-// =========================
-searchBtn.addEventListener("click", () => {
-  const value = countryInput.value.trim();
-
-  if (value) getCountryData(value);
-});
-
-// =========================
-// Enter Key
-// =========================
-countryInput.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") searchBtn.click();
-});
-
-// =========================
-// Random Country
-// =========================
-randomBtn.addEventListener("click", () => {
-  const list = [
+  // ================= SUGGESTIONS FIX =================
+  const countries = [
     "Algeria",
     "France",
     "Brazil",
@@ -113,38 +27,96 @@ randomBtn.addEventListener("click", () => {
     "Italy",
     "Germany",
     "India",
+    "Turkey",
+    "Australia",
+    "Egypt",
+    "Spain",
   ];
 
-  const random = list[Math.floor(Math.random() * list.length)];
+  countryInput.addEventListener("input", () => {
+    const value = countryInput.value.toLowerCase();
 
-  getCountryData(random);
-});
+    suggestionsList.innerHTML = "";
 
-// =========================
-// Last Search Feature
-// =========================
-function saveLastSearch(name) {
-  localStorage.setItem("lastCountry", name);
-  lastSearch.textContent = "Last search: " + name;
-}
+    if (!value) return;
 
-// Load last search on start
-const saved = localStorage.getItem("lastCountry");
+    const filtered = countries.filter((c) => c.toLowerCase().includes(value));
 
-if (saved) {
-  lastSearch.textContent = "Last search: " + saved;
-}
+    filtered.forEach((c) => {
+      const li = document.createElement("li");
+      li.textContent = c;
 
-// =========================
-// Copy Info
-// =========================
-copyBtn.addEventListener("click", () => {
-  const text = `${countryName.textContent}
-Capital: ${capital.textContent}
-Population: ${population.textContent}
-Region: ${region.textContent}`;
+      li.onclick = () => {
+        countryInput.value = c;
+        suggestionsList.innerHTML = "";
+        getCountry(c);
+      };
 
-  navigator.clipboard.writeText(text);
+      suggestionsList.appendChild(li);
+    });
+  });
 
-  alert("Copied!");
+  // ================= API =================
+  async function getCountry(name) {
+    loader.style.display = "block";
+    countryCard.classList.add("hidden");
+
+    try {
+      const res = await fetch(`https://restcountries.com/v3.1/name/${name}`);
+
+      const data = await res.json();
+      const c = data[0];
+
+      currentCountry = c.name.common;
+
+      document.getElementById("countryName").textContent = c.name.common;
+      document.getElementById("countryFlag").src = c.flags.svg;
+
+      countryCard.classList.remove("hidden");
+    } catch (e) {
+      alert("Country not found");
+    }
+
+    loader.style.display = "none";
+  }
+
+  // ================= FAVORITES FIX =================
+  favoriteBtn.addEventListener("click", () => {
+    if (!currentCountry) return;
+
+    if (!favorites.includes(currentCountry)) {
+      favorites.push(currentCountry);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+      renderFavorites();
+    }
+  });
+
+  function renderFavorites() {
+    favoritesList.innerHTML = "";
+
+    favorites.forEach((c, i) => {
+      const div = document.createElement("div");
+      div.className = "favorite-item";
+
+      div.innerHTML = `
+      <span onclick="openCountry('${c}')">${c}</span>
+      <button onclick="removeFav(${i})">X</button>
+    `;
+
+      favoritesList.appendChild(div);
+    });
+  }
+
+  window.removeFav = function (i) {
+    favorites.splice(i, 1);
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    renderFavorites();
+  };
+
+  window.openCountry = function (name) {
+    getCountry(name);
+  };
+
+  // init
+  renderFavorites();
 });
