@@ -17,13 +17,10 @@
                 🌙 Dark Mode
             </button>
 
-            <!-- Title -->
             <h1>🌍 Country Info App</h1>
 
-            <!-- Search Section -->
             <div class="search-box">
 
-                <!-- Input Wrapper -->
                 <div class="input-wrapper">
 
                     <input
@@ -32,69 +29,47 @@
                         placeholder="Enter country name..."
                         autocomplete="off">
 
-                    <!-- Suggestions -->
                     <ul id="suggestionsList"></ul>
 
                 </div>
 
-                <button id="searchBtn">
-                    Search
-                </button>
+                <button id="searchBtn">Search</button>
 
-                <button id="randomBtn">
-                    Random Country
-                </button>
+                <button id="randomBtn">Random Country</button>
 
             </div>
 
-            <!-- Loader -->
             <div class="loader" id="loader"></div>
 
-            <!-- Error -->
             <p class="error-message" id="errorMessage">
                 Country not found!
             </p>
 
-            <!-- Country Card -->
             <div class="country-card hidden" id="countryCard">
 
-                <img
-                    id="countryFlag"
-                    src
-                    alt="Country Flag">
+                <img id="countryFlag" src alt="Country Flag">
 
-                <h2 id="countryName">
-                    Country Name
-                </h2>
+                <h2 id="countryName"></h2>
 
-                <p><strong>Capital:</strong> <span id="capital">-</span></p>
+                <p><strong>Capital:</strong> <span id="capital"></span></p>
 
                 <p><strong>Population:</strong> <span
-                        id="population">-</span></p>
+                        id="population"></span></p>
 
-                <p><strong>Currency:</strong> <span id="currency">-</span></p>
+                <p><strong>Currency:</strong> <span id="currency"></span></p>
 
-                <p><strong>Language:</strong> <span id="language">-</span></p>
+                <p><strong>Language:</strong> <span id="language"></span></p>
 
-                <p><strong>Region:</strong> <span id="region">-</span></p>
+                <p><strong>Region:</strong> <span id="region"></span></p>
 
-                <!-- Border Countries -->
-                <div class="borders-section">
-
-                    <h3>🌍 Border Countries</h3>
-
-                    <div id="bordersContainer"></div>
-
-                </div>
+                <!-- Copy Button -->
+                <button id="copyBtn">📋 Copy Info</button>
 
                 <!-- Favorite -->
-                <button id="favoriteBtn">
-                    ❤️ Add To Favorites
-                </button>
+                <button id="favoriteBtn">❤️ Add To Favorites</button>
 
             </div>
 
-            <!-- Favorites -->
             <div class="favorites-section">
 
                 <h3>⭐ Favorite Countries</h3>
@@ -102,6 +77,9 @@
                 <ul id="favoritesList"></ul>
 
             </div>
+
+            <!-- Last Search -->
+            <p id="lastSearch">Last search: None</p>
 
         </div>
 
